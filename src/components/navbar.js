@@ -14,6 +14,9 @@ export default function Navbar() {
                         <li className="nav-item">
                             <Link to={"/car"}>Car Info</Link>
                         </li>
+                        <li className="nav-item">
+                            <Link to={"/map"}>Map Page</Link>
+                        </li>
                     </ul>
                 </div>
             </div>
