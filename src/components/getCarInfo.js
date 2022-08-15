@@ -8,9 +8,13 @@ export default function CarMake() {
 
     const workDays = [1, 2, 3, 4, 5, 6, 7]
 
-    const [selectYear, setSelectYear] = useState(1991)
+    const [startPoint, setStartPoint] = useState('')
+
+    const [endPoint, setEndPoint] = useState('')
 
     const [mpgInput, setMpgInput] = useState(null)
+
+    const [selectYear, setSelectYear] = useState(1991)
 
     const [carMakes, setCarMakes] = useState([])
 
@@ -31,6 +35,8 @@ export default function CarMake() {
 
     const handleAskQuestion = (event) => {
         event.preventDefault()
+        console.log('starting point:', startPoint)
+        console.log('ending point:', endPoint)
         console.log('mpg input:', mpgInput)
         console.log('year:', selectYear)
         console.log('car make id:', dropItem)
@@ -47,6 +53,32 @@ export default function CarMake() {
                 <form onSubmit={handleAskQuestion}>
 
                     <div>
+                        <label htmlFor='starting-location-field'>Starting Location: </label>
+                        <input
+                            id='starting-location-field'
+                            type="text"
+                            value={startPoint}
+                            onChange={(e) => setStartPoint(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <br />
+
+
+                    <div>
+                        <label htmlFor='ending-location-field'>Ending Location: </label>
+                        <input
+                            id='ending-location-field'
+                            type="text"
+                            value={endPoint}
+                            onChange={(e) => setEndPoint(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <br />
+
+
+                    <div>
                         <label htmlFor='mpg-input-field'>Input MPG: </label>
                         <input
                             id='mpg-input-field'
@@ -57,7 +89,6 @@ export default function CarMake() {
                         />
                     </div>
                     <br />
-
 
 
                     <div>
@@ -76,6 +107,7 @@ export default function CarMake() {
                     </div>
                     <br />
 
+
                     <div>
                         <label htmlFor='car-make-field'>Car Make: </label>
                         <select
@@ -92,6 +124,7 @@ export default function CarMake() {
                     </div>
                     <br />
 
+
                     <div>
                         <label htmlFor='work-days-field'>Working Days: </label>
                         <select
@@ -107,6 +140,7 @@ export default function CarMake() {
                         </select>
                     </div>
                     <br />
+
 
                     <div>
                         <input type="submit" value="Get Car Make Id" />
