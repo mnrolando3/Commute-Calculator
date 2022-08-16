@@ -52,7 +52,7 @@ export default function Home() {
         .get(`https://fathomless-mountain-86819.herokuapp.com/getvehiclespec?year=${selectYear}&trimid=${carTrimID}`)
         .then((res) => {
           console.log('trims', res.data) 
-          const roundedMPGVal = (Math.round((res.data.CombinedMpg) * 100) / 100).toFixed(2)
+          const roundedMPGVal = (Math.round((res.data.CombinedMpg) * 100) / 100).toFixed(1)
           setCombinedMPGVal(roundedMPGVal)
         })
     }
