@@ -9,9 +9,6 @@ export default function Navbar() {
             <li className="nav-item">
               <Link to={"/"}>Home</Link>
             </li>
-            <li className="nav-item">
-              <Link to={"/car"}>Car Info</Link>
-            </li>
           </ul>
         </div>
       </div>
