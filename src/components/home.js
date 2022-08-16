@@ -130,7 +130,7 @@ export default function Home() {
             >
               {carModels.map((modelz, index) => (
                 <option key={index} value={modelz.TrimId}>
-                  {modelz.TrimName}
+                  {modelz.ModelName} {modelz.TrimName}
                 </option>
               ))}
             </select>
