@@ -51,8 +51,9 @@ export default function Home() {
       axios
         .get(`https://fathomless-mountain-86819.herokuapp.com/getvehiclespec?year=${selectYear}&trimid=${carTrimID}`)
         .then((res) => {
-          console.log('trims', res.data)
-          setCombinedMPGVal(res.data.CombinedMpg)
+          console.log('trims', res.data) 
+          const roundedMPGVal = (Math.round((res.data.CombinedMpg) * 100) / 100).toFixed(2)
+          setCombinedMPGVal(roundedMPGVal)
         })
     }
   }, [selectYear, carTrimID])
