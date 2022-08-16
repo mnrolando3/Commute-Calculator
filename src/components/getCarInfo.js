@@ -12,13 +12,19 @@ export default function CarMake() {
 
     const [endPoint, setEndPoint] = useState('')
 
-    const [mpgInput, setMpgInput] = useState(null)
-
     const [selectYear, setSelectYear] = useState(1991)
 
     const [carMakes, setCarMakes] = useState([])
 
-    const [dropItem, setDropItem] = useState('1')
+    const [carMakeID, setCarMakeID] = useState('1')
+
+    const [carModels, setCarModels] = useState([])
+
+    const [carTrimID, setCarTrimID] = useState('')
+
+    const [combinedMPGVal, setCombinedMPGVal] = useState('')
+
+    // const [mpgInput, setMpgInput] = useState(null)
 
     const [workDay, setWorkDay] = useState(1)
 
@@ -28,18 +34,44 @@ export default function CarMake() {
         axios
             .get('https://fathomless-mountain-86819.herokuapp.com/getmakes')
             .then((res) => {
-                console.log('res', res)
+                console.log('makes', res)
                 setCarMakes(res.data)
             })
     }, [])
+
+
+    useEffect(() => {
+        if (selectYear && carMakeID) {
+            axios
+                .get(`https://fathomless-mountain-86819.herokuapp.com/getvehiclemodels?year=${selectYear}&makeid=${carMakeID}`)
+                .then((res) => {
+                    console.log('models', res)
+                    setCarModels(res.data)
+                })
+        }
+    }, [selectYear, carMakeID])
+
+    useEffect(() => {
+        if (selectYear && carTrimID) {
+            axios
+                .get(`https://fathomless-mountain-86819.herokuapp.com/getvehiclespec?year=${selectYear}&trimid=${carTrimID}`)
+                .then((res) => {
+                    console.log('trims', res.data)
+                    setCombinedMPGVal(res.data.CombinedMpg)
+                })
+        }
+    }, [selectYear, carTrimID])
+
+
 
     const handleAskQuestion = (event) => {
         event.preventDefault()
         console.log('starting point:', startPoint)
         console.log('ending point:', endPoint)
-        console.log('mpg input:', mpgInput)
         console.log('year:', selectYear)
-        console.log('car make id:', dropItem)
+        console.log('car make id:', carMakeID)
+        console.log('car trim id:', carTrimID)
+        // console.log('mpg input:', mpgInput)
         console.log('work day:', workDay)
 
     }
@@ -79,19 +111,6 @@ export default function CarMake() {
 
 
                     <div>
-                        <label htmlFor='mpg-input-field'>Input MPG: </label>
-                        <input
-                            id='mpg-input-field'
-                            type="text"
-                            value={mpgInput}
-                            onChange={(e) => setMpgInput(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <br />
-
-
-                    <div>
                         <label htmlFor='year-field'>Year: </label>
                         <select
                             id='year-field'
@@ -113,14 +132,43 @@ export default function CarMake() {
                         <select
                             id='car-make-field'
                             // value={dropItem}
-                            onChange={(e) => setDropItem(e.target.value)}
+                            onChange={(e) => setCarMakeID(e.target.value)}
                         >
-                            {carMakes.map((carz, index) => (
-                                <option key={index} value={carz.Id}>
-                                    {carz.Name}
+                            {carMakes.map((makez, index) => (
+                                <option key={index} value={makez.Id}>
+                                    {makez.Name}
                                 </option>
                             ))}
                         </select>
+                    </div>
+                    <br />
+
+                    <div>
+                        <label htmlFor='car-model-field'>Car Model: </label>
+                        <select
+                            id='car-model-field'
+                            // value={dropItem}
+                            onChange={(e) => setCarTrimID(e.target.value)}
+                        >
+                            {carModels.map((modelz, index) => (
+                                <option key={index} value={modelz.TrimId}>
+                                    {modelz.TrimName}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <br />
+
+
+                    <div>
+                        <label htmlFor='mpg-input-field'>Input MPG: </label>
+                        <input
+                            id='mpg-input-field'
+                            type="text"
+                            value={combinedMPGVal}
+                            onChange={(e) => setCombinedMPGVal(e.target.value)}
+                            required
+                        />
                     </div>
                     <br />
 
@@ -146,6 +194,9 @@ export default function CarMake() {
                         <input type="submit" value="Get Car Make Id" />
                     </div>
                 </form>
+            </div>
+            <div>
+                <p>Combined MPG: {combinedMPGVal}</p>
             </div>
         </>
     )
