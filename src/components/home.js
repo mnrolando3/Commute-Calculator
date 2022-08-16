@@ -122,8 +122,8 @@ export default function Home() {
         position='relative'
         flexDirection='column'
         alignItems='center'
-        // h="100vh"
-        // w="100vw"
+      // h="100vh"
+      // w="100vw"
       >
         <div>
           <form onSubmit={handleAskQuestion}>
@@ -146,6 +146,22 @@ export default function Home() {
                   ref={destinationRef}
                 />
               </Autocomplete>
+            </div>
+            <br />
+
+            <div>
+              <label htmlFor='work-days-field'>Working Days: </label>
+              <select
+                id='work-days-field'
+                // value={dropItem}
+                onChange={(e) => setWorkDay(e.target.value)}
+              >
+                {workDays.map((dayz, index) => (
+                  <option key={index} value={dayz}>
+                    {dayz}
+                  </option>
+                ))}
+              </select>
             </div>
             <br />
 
@@ -221,22 +237,6 @@ export default function Home() {
                 onChange={(e) => setCombinedMPGVal(e.target.value)}
                 required
               />
-            </div>
-            <br />
-
-            <div>
-              <label htmlFor='work-days-field'>Working Days: </label>
-              <select
-                id='work-days-field'
-                // value={dropItem}
-                onChange={(e) => setWorkDay(e.target.value)}
-              >
-                {workDays.map((dayz, index) => (
-                  <option key={index} value={dayz}>
-                    {dayz}
-                  </option>
-                ))}
-              </select>
             </div>
             <br />
 
