@@ -1,15 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import { LoadScript } from "@react-google-maps/api";
+const libraries = ["places"];
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <React.StrictMode>
-      <App />
+      <LoadScript
+        libraries={libraries}
+        googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
+      >
+        <App />
+      </LoadScript>
     </React.StrictMode>
   </BrowserRouter>
 );
