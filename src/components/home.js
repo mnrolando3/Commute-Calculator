@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios'
 import {
   Input,
   ChakraProvider,
@@ -10,39 +10,60 @@ import {
   Text,
   Center,
   Square,
-} from "@chakra-ui/react";
-import React, { useState, useEffect, useRef } from "react";
-import { Autocomplete } from "@react-google-maps/api";
-import Map from "./map";
+} from '@chakra-ui/react'
+import React, { useState, useEffect, useRef } from 'react'
+import { Autocomplete } from '@react-google-maps/api'
+import Map from './map'
 
 export default function Home() {
-  const originRef = useRef();
-  const destinationRef = useRef();
+  const originRef = useRef()
+  const destinationRef = useRef()
   const yearsArray = [
-    2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012,
-    2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, 2002, 2001, 2000,
-    1999, 1998, 1997, 1996, 1995, 1994, 1993, 1992, 1991,
-  ];
-  const workDays = [1, 2, 3, 4, 5, 6, 7];
+    2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009,
+    2008, 2007, 2006, 2005, 2004, 2003, 2002, 2001, 2000, 1999, 1998, 1997,
+    1996, 1995, 1994, 1993, 1992, 1991,
+  ]
+  const workDays = [1, 2, 3, 4, 5, 6, 7]
   // const [mpgInput, setMpgInput] = useState(null);
-  const [selectYear, setSelectYear] = useState(2023);
-  const [carMakes, setCarMakes] = useState([]);
-  const [carMakeID, setCarMakeID] = useState("1");
-  const [workDay, setWorkDay] = useState(1);
-  const [startPoint, setStartPoint] = useState("");
-  const [endPoint, setEndPoint] = useState("");
-  const [carModels, setCarModels] = useState([]);
-  const [carTrimID, setCarTrimID] = useState("");
-  const [combinedMPGVal, setCombinedMPGVal] = useState("");
+  const [selectYear, setSelectYear] = useState(2020)
+  const [carMakes, setCarMakes] = useState([])
+  const [carMakeID, setCarMakeID] = useState('1')
+  const [workDay, setWorkDay] = useState(1)
+  const [startPoint, setStartPoint] = useState('')
+  const [endPoint, setEndPoint] = useState('')
+  const [carModels, setCarModels] = useState([])
+  const [carTrimID, setCarTrimID] = useState('')
+  const [combinedMPGVal, setCombinedMPGVal] = useState('')
+  const [distance, setDistance] = useState('')
+  const [duration, setDuration] = useState('')
+  const [directionsResponse, setDirectionsResponse] = useState(null)
+
+  async function calculateRoute() {
+    console.log('orirint', originRef)
+    if (originRef.current.value === '' || destinationRef.current.value === '') {
+      return
+    }
+    // eslint-disable-next-line no-undef
+    const directionsService = new google.maps.DirectionsService()
+    const results = await directionsService.route({
+      origin: originRef.current.value,
+      destination: destinationRef.current.value,
+      // eslint-disable-next-line no-undef
+      travelMode: google.maps.TravelMode.DRIVING,
+    })
+    setDirectionsResponse(results)
+    setDistance(results.routes[0].legs[0].distance.text)
+    setDuration(results.routes[0].legs[0].duration.text)
+  }
 
   useEffect(() => {
     axios
-      .get("https://fathomless-mountain-86819.herokuapp.com/getmakes")
+      .get('https://fathomless-mountain-86819.herokuapp.com/getmakes')
       .then((res) => {
-        console.log("res", res);
-        setCarMakes(res.data);
-      });
-  }, []);
+        console.log('res', res)
+        setCarMakes(res.data)
+      })
+  }, [])
 
   useEffect(() => {
     if (selectYear && carMakeID) {
@@ -51,11 +72,14 @@ export default function Home() {
           `https://fathomless-mountain-86819.herokuapp.com/getvehiclemodels?year=${selectYear}&makeid=${carMakeID}`
         )
         .then((res) => {
-          console.log("models", res);
-          setCarModels(res.data);
-        });
+          console.log('models', res)
+          if (res.data.length === 0) {
+            setCombinedMPGVal(0)
+          }
+          setCarModels(res.data)
+        })
     }
-  }, [selectYear, carMakeID]);
+  }, [selectYear, carMakeID])
 
   useEffect(() => {
     if (selectYear && carTrimID) {
@@ -64,53 +88,61 @@ export default function Home() {
           `https://fathomless-mountain-86819.herokuapp.com/getvehiclespec?year=${selectYear}&trimid=${carTrimID}`
         )
         .then((res) => {
-          console.log("trims", res.data);
-          const roundedMPGVal = (
-            Math.round(res.data.CombinedMpg * 100) / 100
-          ).toFixed(1);
-          setCombinedMPGVal(roundedMPGVal);
-        });
+          const mpgValueData = res.data.CombinedMpg
+
+          if (mpgValueData) {
+            console.log('ok calcualtion')
+            const roundedMPGVal = (
+              Math.round(mpgValueData * 100) / 100
+            ).toFixed(1)
+
+            setCombinedMPGVal(roundedMPGVal) // => 0.0
+          } else {
+            setCombinedMPGVal(0.0)
+          }
+        })
     }
-  }, [selectYear, carTrimID]);
+  }, [selectYear, carTrimID])
 
   const handleAskQuestion = (event) => {
-    event.preventDefault();
+    event.preventDefault()
+    calculateRoute()
     // console.log('starting point:', startPoint)
     // console.log('ending point:', endPoint)
-    console.log("year:", selectYear);
-    console.log("car make id:", carMakeID);
-    console.log("car trim id:", carTrimID);
+    console.log('year:', selectYear)
+    console.log('car make id:', carMakeID)
+    console.log('car trim id:', carTrimID)
     // console.log('mpg input:', mpgInput)
-    console.log("work day:", workDay);
-  };
+    console.log('work day:', workDay)
+  }
 
   return (
     <ChakraProvider them={theme}>
       <Flex
-        position="relative"
-        flexDirection="column"
-        alignItems="center"
+        position='relative'
+        flexDirection='column'
+        alignItems='center'
         // h="100vh"
         // w="100vw"
       >
         <div>
           <form onSubmit={handleAskQuestion}>
             <div>
-              <label htmlFor="starting-location-field">
-                Starting Location:{" "}
+              <label htmlFor='starting-location-field'>
+                Starting Location:{' '}
               </label>
               <Autocomplete>
-                <Input type="text" placeholder="Origin" ref={originRef} />
+                <Input type='text' placeholder='Origin' ref={originRef} />
               </Autocomplete>
             </div>
             <br />
 
             <div>
-              <label htmlFor="ending-location-field">Ending Location: </label>
+              <label htmlFor='ending-location-field'>Ending Location: </label>
               <Autocomplete>
                 <Input
-                  type="text"
-                  placeholder="Destination"
+                  type='text'
+                  placeholder='Destination'
                   ref={destinationRef}
                 />
               </Autocomplete>
@@ -118,10 +150,10 @@ export default function Home() {
             <br />
 
             <div>
-              <label htmlFor="year-field">Year: </label>
+              <label htmlFor='year-field'>Year: </label>
               <select
-                id="year-field"
-                // value={dropItem}
+                id='year-field'
+                // value={dropItem
                 onChange={(e) => setSelectYear(e.target.value)}
               >
                 {yearsArray.map((yearz, index) => (
@@ -133,9 +165,9 @@ export default function Home() {
             </div>
             <br />
             <div>
-              <label htmlFor="car-make-field">Car Make: </label>
+              <label htmlFor='car-make-field'>Car Make: </label>
               <select
-                id="car-make-field"
+                id='car-make-field'
                 onChange={(e) => setCarMakeID(e.target.value)}
               >
                 {carMakes.map((makez, index) => (
@@ -148,25 +180,43 @@ export default function Home() {
             <br />
 
             <div>
-              <label htmlFor="car-model-field">Car Model: </label>
+              <label htmlFor='car-model-field'>Car Model: </label>
+
               <select
-                id="car-model-field"
+                id='car-model-field'
                 onChange={(e) => setCarTrimID(e.target.value)}
               >
-                {carModels.map((modelz, index) => (
-                  <option key={index} value={modelz.TrimId}>
-                    {modelz.ModelName} {modelz.TrimName}
-                  </option>
-                ))}
+                {carModels.length > 0 ? (
+                  carModels.map((modelz, index) => (
+                    <option key={index} value={modelz.TrimId}>
+                      {modelz.ModelName} {modelz.TrimName}
+                    </option>
+                  ))
+                ) : (
+                  <option>No models found</option>
+                )}
               </select>
             </div>
             <br />
 
             <div>
-              <label htmlFor="mpg-input-field">Input MPG: </label>
+              {console.log(
+                'combined mpg val',
+                combinedMPGVal,
+                carModels.length
+              )}
+              {carModels.length === 0 ? (
+                <p>No models found, please enter MPG</p>
+              ) : combinedMPGVal === 0.0 ? (
+                <p>No MPG found, please enter MPG</p>
+              ) : (
+                ''
+              )}
+              {/* {combinedMPGVal === 0.0 && <p>No MPG found, please enter MPG</p>} */}
+              <label htmlFor='mpg-input-field'>Input MPG: </label>
               <input
-                id="mpg-input-field"
-                type="text"
+                id='mpg-input-field'
+                type='text'
                 value={combinedMPGVal}
                 onChange={(e) => setCombinedMPGVal(e.target.value)}
                 required
@@ -175,9 +225,9 @@ export default function Home() {
             <br />
 
             <div>
-              <label htmlFor="work-days-field">Working Days: </label>
+              <label htmlFor='work-days-field'>Working Days: </label>
               <select
-                id="work-days-field"
+                id='work-days-field'
                 // value={dropItem}
                 onChange={(e) => setWorkDay(e.target.value)}
               >
@@ -191,25 +241,31 @@ export default function Home() {
             <br />
 
             <div>
-              <input type="submit" value="Commutilate Route" />
+              <input type='submit' value='Commutilate Route' />
             </div>
           </form>
         </div>
       </Flex>
-      <div className="map-container">
-        <Flex flexDirection="row" alignItems="justify-content">
-          <Center w="600px">
-            <Heading fontSize="xl">Live Map</Heading>
-            <Map originRef={originRef} destinationRef={destinationRef} />
+      <div className='map-container'>
+        <Flex flexDirection='row' alignItems='justify-content'>
+          <Center w='600px'>
+            <Heading fontSize='xl'>Live Map</Heading>
+            <Map
+              distance={distance}
+              duration={duration}
+              directionsResponse={directionsResponse}
+              originRef={originRef}
+              destinationRef={destinationRef}
+            />
           </Center>
-          <Square bg="blue.500" size="150px">
+          <Square bg='blue.500' size='150px'>
             <Text>empty space</Text>
           </Square>
-          <Box flex="1" bg="tomato">
+          <Box flex='1' bg='tomato'>
             <Text>Result Box</Text>
           </Box>
         </Flex>
       </div>
     </ChakraProvider>
-  );
+  )
 }
