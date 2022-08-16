@@ -1,0 +1,16 @@
+.map-container {
+  padding: 10%;
+  height: 60vh;
+  background-color: lightgrey;
+  font-size: 30px;
+}
+.row {
+  display: flex;
+  height: 100%;
+}
+.left-panel {
+  flex: 5;
+}
+.right-panel {
+  flex: 3;
+}
