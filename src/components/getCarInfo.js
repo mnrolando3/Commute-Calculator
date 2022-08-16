@@ -1,10 +1,8 @@
 import axios from "axios";
 import { Input, ChakraProvider, theme } from "@chakra-ui/react";
 import React, { useState, useEffect, useRef } from "react";
-import { Autocomplete, LoadScript } from "@react-google-maps/api";
+import { Autocomplete } from "@react-google-maps/api";
 import Map from "./map";
-
-const libraries = ["places"];
 
 export default function CarMake() {
   const originRef = useRef();
@@ -21,11 +19,7 @@ export default function CarMake() {
   const [dropItem, setDropItem] = useState("1");
   const [workDay, setWorkDay] = useState(1);
 
-  // console.log('year ', selectYear)
-  // console.log('make', dropItem)
-
   useEffect(() => {
-    // const directionsService = new google.maps.DirectionsService()
     axios
       .get("https://fathomless-mountain-86819.herokuapp.com/getmakes")
       .then((res) => {
@@ -33,19 +27,6 @@ export default function CarMake() {
         setCarMakes(res.data);
       });
   }, []);
-
-  useEffect(() => {
-    // before making req to /getvehiclesmodels do if statement
-    if (selectYear && dropItem) {
-      // do request
-      // axios
-      //   .get('https://fathomless-mountain-86819.herokuapp.com/getmakes')
-      //   .then((res) => {
-      //     console.log('res', res)
-      //     setCarMakes(res.data)
-      //   })
-    }
-  }, [selectYear, dropItem]);
 
   const handleAskQuestion = (event) => {
     event.preventDefault();
@@ -56,105 +37,97 @@ export default function CarMake() {
   };
 
   return (
-    <LoadScript
-      libraries={libraries}
-      googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
-    >
-      <ChakraProvider them={theme}>
-        <div>
-          <h1>Car Info</h1>
-        </div>
-        <div>
-          <form onSubmit={handleAskQuestion}>
-            <div>
-              <label htmlFor="starting-location-field">
-                Starting Location:{" "}
-              </label>
-              <Autocomplete>
-                <Input type="text" placeholder="Origin" ref={originRef} />
-              </Autocomplete>
-            </div>
-            <br />
+    <ChakraProvider them={theme}>
+      <div>
+        <h1>Car Info</h1>
+      </div>
+      <div>
+        <form onSubmit={handleAskQuestion}>
+          <div>
+            <label htmlFor="starting-location-field">Starting Location: </label>
+            <Autocomplete>
+              <Input type="text" placeholder="Origin" ref={originRef} />
+            </Autocomplete>
+          </div>
+          <br />
 
-            <div>
-              <label htmlFor="ending-location-field">Ending Location: </label>
-              <Autocomplete>
-                <Input
-                  type="text"
-                  placeholder="Destination"
-                  ref={destinationRef}
-                />
-              </Autocomplete>
-            </div>
-            <br />
-
-            <div>
-              <label htmlFor="mpg-input-field">Input MPG: </label>
-              <input
-                id="mpg-input-field"
+          <div>
+            <label htmlFor="ending-location-field">Ending Location: </label>
+            <Autocomplete>
+              <Input
                 type="text"
-                value={mpgInput}
-                onChange={(e) => setMpgInput(e.target.value)}
-                required
+                placeholder="Destination"
+                ref={destinationRef}
               />
-            </div>
-            <br />
+            </Autocomplete>
+          </div>
+          <br />
 
-            <div>
-              <label htmlFor="year-field">Year: </label>
-              <select
-                id="year-field"
-                // value={dropItem}
-                onChange={(e) => setSelectYear(e.target.value)}
-              >
-                {yearsArray.map((yearz, index) => (
-                  <option key={index} value={yearz}>
-                    {yearz}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <br />
+          <div>
+            <label htmlFor="mpg-input-field">Input MPG: </label>
+            <input
+              id="mpg-input-field"
+              type="text"
+              value={mpgInput}
+              onChange={(e) => setMpgInput(e.target.value)}
+              required
+            />
+          </div>
+          <br />
 
-            <div>
-              <label htmlFor="car-make-field">Car Make: </label>
-              <select
-                id="car-make-field"
-                // value={dropItem}
-                onChange={(e) => setDropItem(e.target.value)}
-              >
-                {carMakes.map((carz, index) => (
-                  <option key={index} value={carz.Id}>
-                    {carz.Name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <br />
+          <div>
+            <label htmlFor="year-field">Year: </label>
+            <select
+              id="year-field"
+              // value={dropItem}
+              onChange={(e) => setSelectYear(e.target.value)}
+            >
+              {yearsArray.map((yearz, index) => (
+                <option key={index} value={yearz}>
+                  {yearz}
+                </option>
+              ))}
+            </select>
+          </div>
+          <br />
+          <div>
+            <label htmlFor="car-make-field">Car Make: </label>
+            <select
+              id="car-make-field"
+              // value={dropItem}
+              onChange={(e) => setDropItem(e.target.value)}
+            >
+              {carMakes.map((carz, index) => (
+                <option key={index} value={carz.Id}>
+                  {carz.Name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <br />
 
-            <div>
-              <label htmlFor="work-days-field">Working Days: </label>
-              <select
-                id="work-days-field"
-                // value={dropItem}
-                onChange={(e) => setWorkDay(e.target.value)}
-              >
-                {workDays.map((dayz, index) => (
-                  <option key={index} value={dayz}>
-                    {dayz}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <br />
+          <div>
+            <label htmlFor="work-days-field">Working Days: </label>
+            <select
+              id="work-days-field"
+              // value={dropItem}
+              onChange={(e) => setWorkDay(e.target.value)}
+            >
+              {workDays.map((dayz, index) => (
+                <option key={index} value={dayz}>
+                  {dayz}
+                </option>
+              ))}
+            </select>
+          </div>
+          <br />
 
-            <div>
-              <input type="submit" value="Get Car Make Id" />
-            </div>
-          </form>
-        </div>
-        <Map originRef={originRef} destinationRef={destinationRef} />
-      </ChakraProvider>
-    </LoadScript>
+          <div>
+            <input type="submit" value="Get Car Make Id" />
+          </div>
+        </form>
+      </div>
+      <Map originRef={originRef} destinationRef={destinationRef} />
+    </ChakraProvider>
   );
 }
