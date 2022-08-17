@@ -61,6 +61,8 @@ export default function Home() {
     setDirectionsResponse(results);
     setDistance(results.routes[0].legs[0].distance.text);
     setDuration(results.routes[0].legs[0].duration.text);
+
+    commutePostData(results.routes[0].legs[0].distance.text)
   }
 
   useEffect(() => {
@@ -124,7 +126,7 @@ export default function Home() {
     return city.trim()
   }
 
-  const commutePostData = async () => {
+  const commutePostData = async (distanceValue) => {
 
     let cityStart = splitAddress(originRef.current.value)
     let cityEnd = splitAddress(destinationRef.current.value)
@@ -144,22 +146,43 @@ export default function Home() {
     const endGas = endAvgGasLocation.data.locationAverage
 
     const avgGasLocation = (startGas + endGas) / 2
-
-    // const response = await axios.post(`${baseUrl}/commute/`,
-    //   {
-    //     start_location: cityStart,
-    //     end_location: cityEnd,
-    //     days_per_week_commuting: workDay,
-    //     distance: distance,
-    //     avg_gas_commute: avgGasLocation
-    //   })
-    // console.log('commute Post Data Response', response)
+    console.log(distance)
+    const response = await axios.post(`${baseUrl}/commute/`,
+      {
+        start_location: cityStart,
+        end_location: cityEnd,
+        days_per_week_commuting: workDay,
+        distance: parseFloat(distanceValue),
+        avg_gas_commute: avgGasLocation
+      })
+    console.log('commute Post Data Response', response)
+    // const commuteID = response.data.id
   }
+
+  const vehiclePostData = async () => {
+    const response = await axios.post(`${baseUrl}/vehicle/`,
+      {
+        mpg: combinedMPGVal
+      })
+    console.log('vehicle Post Data Response', response)
+    // const vehicleID = response.data.id
+  }
+
+  // const calculatePostData = async () => {
+  //   const response = await axios.post(`${baseUrl}/calc/`,
+  //     {
+  //       commute: 3,
+  //       vehicle: 2
+  //     })
+  //   console.log('calculate Post Data Response', response)
+  // }
 
   const handleAskQuestion = (event) => {
     event.preventDefault();
     calculateRoute();
-    commutePostData()
+    // commutePostData();
+    // vehiclePostData();
+    // calculatePostData();
 
     // axios
     //   .post(`commute data`,
@@ -229,7 +252,7 @@ export default function Home() {
             <br></br>
             <br></br>
             <div>
-              <label htmlFor="work-days-field">Working Days: </label>
+              <label htmlFor="work-days-field">Days per Week Commuting: </label>
               <select
                 id="work-days-field"
                 // value={dropItem}
