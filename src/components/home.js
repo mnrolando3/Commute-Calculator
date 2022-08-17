@@ -22,6 +22,7 @@ import { FaLocationArrow, FaTimes } from "react-icons/fa";
 import Map from "./map";
 
 export default function Home() {
+  const baseUrl = 'https://commutilator-api.herokuapp.com'
   const originRef = useRef();
   const destinationRef = useRef();
   const yearsArray = [
@@ -110,39 +111,85 @@ export default function Home() {
     }
   }, [selectYear, carTrimID]);
 
+  const splitAddress = (addressText) => {
+    const addressArray = addressText.split(",");
+    let city = ''
+    if (addressArray.length === 3) {
+      city = addressArray[0]
+    } else if (addressArray.length === 4) {
+      city = addressArray[1]
+    } else if (addressArray.length === 5) {
+      city = addressArray[2]
+    }
+    return city.trim()
+  }
+
+  const commutePostData = async () => {
+
+    let cityStart = splitAddress(originRef.current.value)
+    let cityEnd = splitAddress(destinationRef.current.value)
+    console.log('home.calculateRoute().cityStart', cityStart)
+    console.log('home.calculateRoute().cityEnd', cityEnd)
+
+    const startAvgGasLocation = await axios
+      .get(`https://fathomless-mountain-86819.herokuapp.com/getgasprice?search=${cityStart}`)
+
+    const endAvgGasLocation = await axios
+      .get(`https://fathomless-mountain-86819.herokuapp.com/getgasprice?search=${cityEnd}`)
+
+    // console.log('start gas location', startAvgGasLocation, 'end gas location', endAvgGasLocation)
+
+    const startGas = startAvgGasLocation.data.locationAverage
+
+    const endGas = endAvgGasLocation.data.locationAverage
+
+    const avgGasLocation = (startGas + endGas) / 2
+
+    // const response = await axios.post(`${baseUrl}/commute/`,
+    //   {
+    //     start_location: cityStart,
+    //     end_location: cityEnd,
+    //     days_per_week_commuting: workDay,
+    //     distance: distance,
+    //     avg_gas_commute: avgGasLocation
+    //   })
+    // console.log('commute Post Data Response', response)
+  }
+
   const handleAskQuestion = (event) => {
     event.preventDefault();
     calculateRoute();
-    
-    axios
-      .post(`commute data`,
-        {
-          start_location: { startPoint },
-          end_location: { endPoint },
-          days_per_week_commuting: { workDay },
-          distance: { distance },
-          avg_gas_commute: 3.76
-        })
-      .post(`vehicle data`,
-        {
-          mpg: { combinedMPGVal }
-        })
-      // .post(`calculation data`,
-      //   {
-      //     "commute": 3,
-      //     "vehicle": 2
-      //   })
-      .then((res) => {
-        // Show Results?
-      })
-    
+    commutePostData()
+
+    // axios
+    //   .post(`commute data`,
+    //     {
+    //       start_location: { startPoint },
+    //       end_location: { endPoint },
+    //       days_per_week_commuting: { workDay },
+    //       distance: { distance },
+    //       avg_gas_commute: 3.76
+    //     })
+    //   .post(`vehicle data`,
+    //     {
+    //       mpg: { combinedMPGVal }
+    //     })
+    //   // .post(`calculation data`,
+    //   //   {
+    //   //     "commute": 3,
+    //   //     "vehicle": 2
+    //   //   })
+    //   .then((res) => {
+    //     // Show Results?
+    //   })
+
     // console.log('starting point:', startPoint)
     // console.log('ending point:', endPoint)
-//     console.log("year:", selectYear);
-//     console.log("car make id:", carMakeID);
-//     console.log("car trim id:", carTrimID);
+    //     console.log("year:", selectYear);
+    //     console.log("car make id:", carMakeID);
+    //     console.log("car trim id:", carTrimID);
     // console.log('mpg input:', mpgInput)
-//     console.log("work day:", workDay);
+    //     console.log("work day:", workDay);
   };
 
   return (
