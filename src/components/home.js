@@ -36,14 +36,16 @@ export default function Home() {
   const [carMakes, setCarMakes] = useState([]);
   const [carMakeID, setCarMakeID] = useState("1");
   const [workDay, setWorkDay] = useState(1);
-  const [startPoint, setStartPoint] = useState("");
-  const [endPoint, setEndPoint] = useState("");
   const [carModels, setCarModels] = useState([]);
   const [carTrimID, setCarTrimID] = useState("");
   const [combinedMPGVal, setCombinedMPGVal] = useState("");
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
   const [directionsResponse, setDirectionsResponse] = useState(null);
+  const [calcCommuteId, setCalcCommuteId] = useState(0)
+  const [calcVehicleId, setCalcVehicleId] = useState(0)
+  const [resultCalculation, setResultCalculation] = useState({ result: { weekly: "" } })
+
 
   async function calculateRoute() {
     console.log("orirint", originRef);
@@ -101,10 +103,7 @@ export default function Home() {
 
           if (mpgValueData) {
             console.log("ok calcualtion");
-            const roundedMPGVal = (
-              Math.round(mpgValueData * 100) / 100
-            ).toFixed(1);
-
+            const roundedMPGVal = roundNumber(mpgValueData)
             setCombinedMPGVal(roundedMPGVal); // => 0.0
           } else {
             setCombinedMPGVal(0.0);
@@ -126,6 +125,11 @@ export default function Home() {
     return city.trim()
   }
 
+  const roundNumber = (numberVal) => {
+    return (Math.round(numberVal * 100) / 100
+    ).toFixed(1);
+  }
+
   const commutePostData = async (distanceValue) => {
 
     let cityStart = splitAddress(originRef.current.value)
@@ -145,7 +149,7 @@ export default function Home() {
 
     const endGas = endAvgGasLocation.data.locationAverage
 
-    const avgGasLocation = (startGas + endGas) / 2
+    const avgGasLocation = roundNumber((startGas + endGas) / 2)
     console.log(distance)
     const response = await axios.post(`${baseUrl}/commute/`,
       {
@@ -156,6 +160,7 @@ export default function Home() {
         avg_gas_commute: avgGasLocation
       })
     console.log('commute Post Data Response', response)
+    setCalcCommuteId(response.data.id)
     // const commuteID = response.data.id
   }
 
@@ -165,46 +170,40 @@ export default function Home() {
         mpg: combinedMPGVal
       })
     console.log('vehicle Post Data Response', response)
+    setCalcVehicleId(response.data.id)
     // const vehicleID = response.data.id
   }
 
   // const calculatePostData = async () => {
   //   const response = await axios.post(`${baseUrl}/calc/`,
   //     {
-  //       commute: 3,
-  //       vehicle: 2
+  //       commute: calcCommuteId,
+  //       vehicle: calcVehicleId
   //     })
-  //   console.log('calculate Post Data Response', response)
+  //   console.log('calculate Post Data Response', response.data)
+  //   setResultCalculation(response.data)
   // }
 
-  const handleAskQuestion = (event) => {
-    event.preventDefault();
-    calculateRoute();
-    // commutePostData();
-    // vehiclePostData();
-    // calculatePostData();
+  React.useEffect(() => {
+    if (calcCommuteId !== 0 && calcVehicleId !== 0) {
+      const getData = async () => {
+        const response = await axios.post(`${baseUrl}/calc/`,
+          {
+            commute: calcCommuteId,
+            vehicle: calcVehicleId
+          })
+        console.log('calculate Post Data Response', response.data)
+        setResultCalculation(response.data)
 
-    // axios
-    //   .post(`commute data`,
-    //     {
-    //       start_location: { startPoint },
-    //       end_location: { endPoint },
-    //       days_per_week_commuting: { workDay },
-    //       distance: { distance },
-    //       avg_gas_commute: 3.76
-    //     })
-    //   .post(`vehicle data`,
-    //     {
-    //       mpg: { combinedMPGVal }
-    //     })
-    //   // .post(`calculation data`,
-    //   //   {
-    //   //     "commute": 3,
-    //   //     "vehicle": 2
-    //   //   })
-    //   .then((res) => {
-    //     // Show Results?
-    //   })
+      }
+      getData()
+    }
+  }, [calcCommuteId, calcVehicleId])
+
+  const handleAskQuestion = async (event) => {
+    event.preventDefault();
+    await calculateRoute();
+    await vehiclePostData();
 
     // console.log('starting point:', startPoint)
     // console.log('ending point:', endPoint)
@@ -373,7 +372,11 @@ export default function Home() {
             />
           </GridItem>
           <GridItem colStart={4} colEnd={6}>
-            Result Box
+            {resultCalculation.result.weekly > 0 ?
+              <Center w='300px' h='500px'><Text>Weekly Results: ${resultCalculation.result.weekly}</Text></Center>
+              : <Center w='300px' h='500px'><Text>Please enter your car information to get the weekly result.</Text></Center>
+            }
+
           </GridItem>
         </Grid>
       </div>
