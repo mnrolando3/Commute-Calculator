@@ -1,4 +1,4 @@
-// import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useState } from 'react';
 
 
@@ -38,7 +38,7 @@ export const LoginForm = () => {
                     </div>
                     <div className="form-submit">
                         <input type="submit" value="Log In" className="button" />
-                        {/* <Link to={"/new-user"}><p className="new-user">New User? Create Account</p></Link> */}
+                        <Link to={"/new-user"}><p className="new-user">New User? Create an Account</p></Link>
                     </div>
                 </form>
             </div>
@@ -46,4 +46,4 @@ export const LoginForm = () => {
     );
 }
 
-export default Login;
+export default LoginForm;

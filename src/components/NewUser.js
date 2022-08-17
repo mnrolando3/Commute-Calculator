@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 
-export const NewUser = () => {
+export const NewUserForm = () => {
 
     const [email, setEmail] = useState('')
     const [username, setUsername] = useState('')
@@ -48,7 +48,6 @@ export const NewUser = () => {
                     </div>
                     <div className="form-submit">
                         <input type="submit" value="Create Account" className="button" />
-                        {/* <Link to={"/new-user"}><p className="new-user">New User? Create Account</p></Link> */}
                     </div>
                 </form>
             </div>
@@ -56,4 +55,4 @@ export const NewUser = () => {
     );
 }
 
-export default NewUser;
+export default NewUserForm;
