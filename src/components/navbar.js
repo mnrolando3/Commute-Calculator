@@ -13,6 +13,12 @@ export default function Navbar() {
             <li className="nav-item">
               <Link to={"/"}>Home</Link>
             </li>
+            <li className="nav-item">
+              <Link to={"/login"}>Login</Link>
+            </li>
+            <li className="nav-item">
+              <Link to={"/new-user"}>Register</Link>
+            </li>
           </ul>
         </div>
       </div>

@@ -1,14 +1,16 @@
-// import { Link, Navigate } from "react-router-dom";
 import { useState } from 'react';
 
 
-export const LoginForm = () => {
+export const NewUser = () => {
 
+    const [email, setEmail] = useState('')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
+
     const handleSubmit = (event) => {
         event.preventDefault()
+        console.log(email)
         console.log(username)
         console.log(password)
 
@@ -18,8 +20,16 @@ export const LoginForm = () => {
     return (
         <>
             <div className="wrap">
-                <h2>Log In</h2>
+                <h2>Create an Account</h2>
                 <form id="login-form" onSubmit={handleSubmit}>
+                    <div className="controls">
+                        <label htmlFor="email-field">email: </label>
+                        <input
+                            id="email-field"
+                            onChange={(e) => setEmail(e.target.value)}
+                            type="text"
+                        />
+                    </div>
                     <div className="controls">
                         <label htmlFor="username-field">username: </label>
                         <input
@@ -37,7 +47,7 @@ export const LoginForm = () => {
                         />
                     </div>
                     <div className="form-submit">
-                        <input type="submit" value="Log In" className="button" />
+                        <input type="submit" value="Create Account" className="button" />
                         {/* <Link to={"/new-user"}><p className="new-user">New User? Create Account</p></Link> */}
                     </div>
                 </form>
@@ -46,4 +56,4 @@ export const LoginForm = () => {
     );
 }
 
-export default Login;
+export default NewUser;
