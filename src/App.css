@@ -40,7 +40,7 @@
   font-weight: bold;
 }
 
-.nav-item:visited {
+/* .nav-item:visited {
   text-decoration: none;
   color: black;
 }
@@ -79,4 +79,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
