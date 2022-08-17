@@ -184,23 +184,39 @@ export default function Home() {
   //   setResultCalculation(response.data)
   // }
 
+  const memCalcCallback = React.useCallback(async () => {
+    console.log('Making request----,', calcCommuteId, calcVehicleId)
+    //   const response = await axios.post(`${baseUrl}/calc/`,
+    //     {
+    //       commute: calcCommuteId,
+    //       vehicle: calcVehicleId
+    //     })
+    //   console.log('calculate Post Data Response', response.data)
+    //   setResultCalculation(response.data)
+
+    // 
+  }, [calcCommuteId, calcVehicleId])
+
   React.useEffect(() => {
     if (calcCommuteId !== 0 && calcVehicleId !== 0) {
-      const getData = async () => {
-        const response = await axios.post(`${baseUrl}/calc/`,
-          {
-            commute: calcCommuteId,
-            vehicle: calcVehicleId
-          })
-        console.log('calculate Post Data Response', response.data)
-        setResultCalculation(response.data)
+      memCalcCallback()
+      // const getData = async () => {
+      // console.log('Making request----,', calcCommuteId, calcVehicleId)
+      //   const response = await axios.post(`${baseUrl}/calc/`,
+      //     {
+      //       commute: calcCommuteId,
+      //       vehicle: calcVehicleId
+      //     })
+      //   console.log('calculate Post Data Response', response.data)
+      //   setResultCalculation(response.data)
 
-      }
-      getData()
+      // 
+      // }
+      // getData()
     }
   }, [calcCommuteId, calcVehicleId])
 
-  const handleAskQuestion = async (event) => {
+  const handleCalculation = async (event) => {
     event.preventDefault();
     await calculateRoute();
     await vehiclePostData();
@@ -224,7 +240,7 @@ export default function Home() {
         w="100vw"
       >
         <div>
-          <form onSubmit={handleAskQuestion}>
+          <form onSubmit={handleCalculation}>
             <div>
               <label htmlFor="starting-location-field">
                 Starting Location:{" "}
