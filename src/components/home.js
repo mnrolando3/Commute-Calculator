@@ -19,7 +19,9 @@ import {
 import React, { useState, useEffect, useRef } from "react";
 import { Autocomplete } from "@react-google-maps/api";
 import { FaLocationArrow, FaTimes } from "react-icons/fa";
-import Map from "./map";
+
+import Map from "./Map";
+import { getGasPrice, getVehicleSpecs } from '../utils/api'
 
 export default function Home() {
   const baseUrl = 'https://commutilator-api.herokuapp.com'
@@ -94,22 +96,20 @@ export default function Home() {
 
   useEffect(() => {
     if (selectYear && carTrimID) {
-      axios
-        .get(
-          `https://fathomless-mountain-86819.herokuapp.com/getvehiclespec?year=${selectYear}&trimid=${carTrimID}`
-        )
-        .then((res) => {
-          const mpgValueData = res.data.CombinedMpg;
+      const getMpg = async () => {
+        const mpgValueData = await getVehicleSpecs(selectYear, carTrimID)
 
-          if (mpgValueData) {
-            console.log("ok calcualtion");
-            const roundedMPGVal = roundNumber(mpgValueData)
-            setCombinedMPGVal(roundedMPGVal); // => 0.0
-          } else {
-            setCombinedMPGVal(0.0);
-          }
-        });
+        if (mpgValueData) {
+          console.log("ok calcualtion");
+          const roundedMPGVal = roundNumber(mpgValueData)
+          setCombinedMPGVal(roundedMPGVal); // => 0.0
+        } else {
+          setCombinedMPGVal(0.0);
+        }
+      }
+      getMpg()
     }
+
   }, [selectYear, carTrimID]);
 
   const splitAddress = (addressText) => {
@@ -137,11 +137,9 @@ export default function Home() {
     console.log('home.calculateRoute().cityStart', cityStart)
     console.log('home.calculateRoute().cityEnd', cityEnd)
 
-    const startAvgGasLocation = await axios
-      .get(`https://fathomless-mountain-86819.herokuapp.com/getgasprice?search=${cityStart}`)
+    const startAvgGasLocation = await getGasPrice(cityStart)
+    const endAvgGasLocation = await getGasPrice(cityEnd)
 
-    const endAvgGasLocation = await axios
-      .get(`https://fathomless-mountain-86819.herokuapp.com/getgasprice?search=${cityEnd}`)
 
     // console.log('start gas location', startAvgGasLocation, 'end gas location', endAvgGasLocation)
 
