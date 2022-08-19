@@ -38,7 +38,7 @@ export const LoginForm = () => {
                     </div>
                     <div className="form-submit">
                         <input type="submit" value="Log In" className="button" />
-                        <Link to={"/new-user"}><p className="new-user">New User? Create an Account</p></Link>
+                        <Link to={"/register"}><p className="new-user">New User? Create an Account</p></Link>
                     </div>
                 </form>
             </div>

@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './components/Home'
 import LoginForm from "./components/Login"
-import NewUserForm from './components/NewUser'
+import RegisterForm from './components/Register'
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path="/login" element={<LoginForm />} />
-        <Route path="/new-user" element={<NewUserForm />} />
+        <Route path="/register" element={<RegisterForm />} />
       </Routes>
     </>
   )

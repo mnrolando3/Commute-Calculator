@@ -17,7 +17,7 @@ export default function Navbar() {
               <Link to={"/login"}>Login</Link>
             </li>
             <li className="nav-item">
-              <Link to={"/new-user"}>Register</Link>
+              <Link to={"/register"}>Register</Link>
             </li>
           </ul>
         </div>
