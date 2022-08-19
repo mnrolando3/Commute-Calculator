@@ -19,35 +19,35 @@ export const RegisterForm = () => {
 
     return (
         <>
-            <div className="wrap">
+            <div className="register-wrap">
                 <h2>Create an Account</h2>
-                <form id="login-form" onSubmit={handleSubmit}>
-                    <div className="controls">
-                        <label htmlFor="email-field">email: </label>
+                <form onSubmit={handleSubmit}>
+                    <div className="register-field">
+                        <label htmlFor="email-field" className="user-label">email: </label>
                         <input
                             id="email-field"
                             onChange={(e) => setEmail(e.target.value)}
                             type="text"
                         />
                     </div>
-                    <div className="controls">
-                        <label htmlFor="username-field">username: </label>
+                    <div className="register-field">
+                        <label htmlFor="username-field" className="user-label">username: </label>
                         <input
                             id="username-field"
                             onChange={(e) => setUsername(e.target.value)}
                             type="text"
                         />
                     </div>
-                    <div className="controls">
-                        <label htmlFor="password-field">password: </label>
+                    <div className="register-field">
+                        <label htmlFor="password-field" className="user-label">password: </label>
                         <input
                             id="password-field"
                             onChange={(e) => setPassword(e.target.value)}
                             type="password"
                         />
                     </div>
-                    <div className="form-submit">
-                        <input type="submit" value="Create Account" className="button" />
+                    <div className="register-submit">
+                        <input type="submit" value="Create Account" />
                     </div>
                 </form>
             </div>
