@@ -17,10 +17,10 @@ export const LoginForm = () => {
 
     return (
         <>
-            <div className="wrap">
+            <div className="login-wrap">
                 <h2>Log In</h2>
-                <form id="login-form" onSubmit={handleSubmit}>
-                    <div className="controls">
+                <form onSubmit={handleSubmit}>
+                    <div className="login-field">
                         <label htmlFor="username-field">username: </label>
                         <input
                             id="username-field"
@@ -28,7 +28,7 @@ export const LoginForm = () => {
                             type="text"
                         />
                     </div>
-                    <div className="controls">
+                    <div className="login-field">
                         <label htmlFor="password-field">password: </label>
                         <input
                             id="password-field"
@@ -36,9 +36,9 @@ export const LoginForm = () => {
                             type="password"
                         />
                     </div>
-                    <div className="form-submit">
-                        <input type="submit" value="Log In" className="button" />
-                        <Link to={"/register"}><p className="new-user">New User? Create an Account</p></Link>
+                    <div className="login-submit">
+                        <input type="submit" value="Log In" />
+                        <Link to={"/register"}><p className="login-new-user">New User? Create an Account</p></Link>
                     </div>
                 </form>
             </div>
