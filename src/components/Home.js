@@ -172,6 +172,10 @@ export default function Home() {
             </select>
           </div>
 
+          <div style={{ paddingBottom: '25px' }}>
+            <p>Vehicle Information</p>
+          </div>
+
           {/* year dp  */}
           <div style={{ paddingBottom: '50px' }}>
             <label htmlFor='year-field'>Year: </label>
@@ -181,7 +185,7 @@ export default function Home() {
               onChange={(e) => setSelectYear(e.target.value)}
             >
               <option value="" disabled hidden>
-                Year
+                Select Year
               </option>
               {/* <option value="none" selected disabled hidden>Year</option> */}
               {YEARS.map((year, index) => (
@@ -197,8 +201,12 @@ export default function Home() {
             <label htmlFor='car-make-field'>Car Make: </label>
             <select
               id='car-make-field'
+              defaultValue=""
               onChange={(e) => setCarMakeID(e.target.value)}
             >
+              <option value="" disabled hidden>
+                Select Car Make
+              </option>
               {carMakes.map((carMake, index) => (
                 <option key={index} value={carMake.Id}>
                   {carMake.Name}
@@ -212,8 +220,12 @@ export default function Home() {
             <label htmlFor='car-model-field'>Car Model: </label>
             <select
               id='car-model-field'
+              defaultValue=""
               onChange={(e) => setCarTrimID(e.target.value)}
             >
+              <option value="" disabled hidden>
+                Select Car Model
+              </option>
               {carModels.length > 0 ? (
                 carModels.map((carModel, index) => (
                   <option key={index} value={carModel.TrimId}>
