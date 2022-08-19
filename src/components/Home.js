@@ -91,7 +91,7 @@ export default function Home() {
       // eslint-disable-next-line no-undef
       travelMode: google.maps.TravelMode.DRIVING,
     })
-    const distanceResult = results.routes[0].legs[0].duration.text
+    const distanceResult = results.routes[0].legs[0].distance.text
     setDirectionsResponse(results)
     setDuration(results.routes[0].legs[0].duration.text)
     setDistance(distanceResult)
