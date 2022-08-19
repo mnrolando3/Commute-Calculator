@@ -177,8 +177,13 @@ export default function Home() {
             <label htmlFor='year-field'>Year: </label>
             <select
               id='year-field'
+              defaultValue=""
               onChange={(e) => setSelectYear(e.target.value)}
             >
+              <option value="" disabled hidden>
+                Year
+              </option>
+              {/* <option value="none" selected disabled hidden>Year</option> */}
               {YEARS.map((year, index) => (
                 <option key={index} value={year}>
                   {year}
