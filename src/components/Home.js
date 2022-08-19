@@ -146,7 +146,7 @@ export default function Home() {
           </div>
 
           {/* end location input  */}
-          <div style={{ paddingBottom: '40px' }}>
+          <div style={{ paddingBottom: '50px' }}>
             <label htmlFor='ending-location-field'>Ending Location: </label>
             <Autocomplete>
               <Input
@@ -162,8 +162,12 @@ export default function Home() {
             <label htmlFor='work-days-field'>Days per Week Commuting: </label>
             <select
               id='work-days-field'
+              defaultValue=""
               onChange={(e) => setWorkDay(e.target.value)}
             >
+              <option value="" disabled hidden>
+                Select Days
+              </option>
               {WORK_DAYS.map((day, index) => (
                 <option key={index} value={day}>
                   {day}
@@ -172,13 +176,22 @@ export default function Home() {
             </select>
           </div>
 
+          <div style={{ paddingBottom: '20px' }}>
+            <p><b>Select Vehicle Information</b></p>
+          </div>
+
           {/* year dp  */}
-          <div style={{ paddingBottom: '50px' }}>
+          <div style={{ paddingBottom: '40px' }}>
             <label htmlFor='year-field'>Year: </label>
             <select
               id='year-field'
+              defaultValue=""
               onChange={(e) => setSelectYear(e.target.value)}
             >
+              <option value="" disabled hidden>
+                Select Year
+              </option>
+              {/* <option value="none" selected disabled hidden>Year</option> */}
               {YEARS.map((year, index) => (
                 <option key={index} value={year}>
                   {year}
@@ -188,12 +201,16 @@ export default function Home() {
           </div>
 
           {/* car make dp  */}
-          <div style={{ paddingBottom: '50px' }}>
+          <div style={{ paddingBottom: '40px' }}>
             <label htmlFor='car-make-field'>Car Make: </label>
             <select
               id='car-make-field'
+              defaultValue=""
               onChange={(e) => setCarMakeID(e.target.value)}
             >
+              <option value="" disabled hidden>
+                Select Car Make
+              </option>
               {carMakes.map((carMake, index) => (
                 <option key={index} value={carMake.Id}>
                   {carMake.Name}
@@ -207,8 +224,12 @@ export default function Home() {
             <label htmlFor='car-model-field'>Car Model: </label>
             <select
               id='car-model-field'
+              defaultValue=""
               onChange={(e) => setCarTrimID(e.target.value)}
             >
+              <option value="" disabled hidden>
+                Select Car Model
+              </option>
               {carModels.length > 0 ? (
                 carModels.map((carModel, index) => (
                   <option key={index} value={carModel.TrimId}>
@@ -221,7 +242,15 @@ export default function Home() {
             </select>
           </div>
 
-          <div style={{ paddingBottom: '30px' }}>
+          <div style={{ paddingBottom: '40px' }}>
+            <p><b>OR</b></p>
+          </div>
+
+          <div style={{ paddingBottom: '20px' }}>
+            <p><b>Input MPG Value</b></p>
+          </div>
+
+          <div style={{ paddingBottom: '40px' }}>
             {carModels.length === 0 ? (
               <p>No models found, please enter MPG</p>
             ) : combinedMPGVal === 0.0 ? (
@@ -230,7 +259,7 @@ export default function Home() {
               ''
             )}
             {combinedMPGVal === 0.0 && <p>No MPG found, please enter MPG</p>}
-            <label htmlFor='mpg-input-field'>Input MPG: </label>
+            <label htmlFor='mpg-input-field'>Combined MPG: </label>
             <input
               id='mpg-input-field'
               type='text'
