@@ -6,20 +6,13 @@ export default function Navbar() {
     <>
       <div className='nav'>
         <div className='nav-content'>
-          <div>
-            <h1>Commutilator</h1>
+          <div className='logo'>
+            <Link to={'/'}>Commutilator</Link>
           </div>
-          <ul className='nav-items'>
-            <li className='nav-item'>
-              <Link to={'/'}>Home</Link>
-            </li>
-            <li className="nav-item">
-              <Link to={"/login"}>Login</Link>
-            </li>
-            <li className="nav-item">
-              <Link to={"/register"}>Register</Link>
-            </li>
-          </ul>
+          <div className='menu'>
+            <Link to={"/login"}>Login</Link>
+            <Link to={"/register"}>Register</Link>
+          </div>
         </div>
       </div>
     </>
